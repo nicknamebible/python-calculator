@@ -1,34 +1,64 @@
+
 class Calculator:
     def add(self, a, b):
         return a + b
 
     def subtract(self, a, b):
-        return b - a
+        return a - b
 
     def multiply(self, a, b):
         result = 0
-        for i in range(b+1):
-            result = self.add(result, a)
+
+        for i in range(abs(b)):
+            if b < 0:
+                result = self.subtract(result, a)
+            else:
+                result = self.add(result, a)
+
         return result
 
     def divide(self, a, b):
-        result = 0
-        while a > b:
-            a = self.subtract(a, b)
-            result += 1
-        return result
-    
-    def modulo(self, a, b):
-        while a <= b:
-            a = a-b
-        return a
+        if b == 0:
+            raise ZeroDivisionError("division by zero")
 
-# Example usage:
+        result = 0
+        negative = (a < 0) != (b < 0)
+        a = abs(a)
+        b = abs(b)
+
+        while a >= b:
+            a = self.subtract(a, b)
+            result = self.add(result, 1)
+
+        if negative:
+            result = self.subtract(0, result)
+
+        return result
+
+    def modulo(self, a, b):
+        if b == 0:
+            raise ZeroDivisionError("modulo by zero")
+
+        remainder = abs(a)
+        divisor = abs(b)
+
+        while remainder >= divisor:
+            remainder = self.subtract(remainder, divisor)
+
+        if a < 0 and remainder != 0:
+            remainder = self.subtract(divisor, remainder)
+
+        if b < 0 and remainder != 0:
+            remainder = self.subtract(0, remainder)
+
+        return remainder
+
+
 if __name__ == "__main__":
     calc = Calculator()
     print("This is a simple calculator class!")
-    print("Example: addition: ", calc.add(1, 2))
-    print("Example: subtraction: ", calc.subtract(4, 2))
-    print("Example: multiplication: ", calc.multiply(2, 3))
-    print("Example: division: ", calc.divide(10, 2))
-    print("Example: modulo: ", calc.modulo(10, 3))
+    print("Example: addition:", calc.add(1, 2))
+    print("Example: subtraction:", calc.subtract(4, 2))
+    print("Example: multiplication:", calc.multiply(2, 3))
+    print("Example: division:", calc.divide(10, 2))
+    print("Example: modulo:", calc.modulo(10, 3))
